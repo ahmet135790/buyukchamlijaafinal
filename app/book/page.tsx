@@ -233,8 +233,16 @@ export default function BookingPage() {
     return nextErrors;
   }
 
-  async function fetchAvailability(dateValue: string, areaId: string) {
-    const response = await fetch(`/api/bookings/availability?date=${encodeURIComponent(dateValue)}&areaId=${encodeURIComponent(areaId)}`);
+  async function fetchAvailability(dateValue: string, areaId: string, timeValue: string) {
+    const params = new URLSearchParams({
+      date: dateValue,
+      time: timeValue,
+      adults: String(adults),
+      children3Plus: String(children3Plus),
+      childrenUnder3: String(childrenUnder3),
+    });
+    if (areaId) params.set("areaId", areaId);
+    const response = await fetch(`/api/bookings/availability?${params.toString()}`);
     const payload = await response.json();
 
     return {
@@ -256,18 +264,6 @@ export default function BookingPage() {
       return;
     }
 
-    if (!form.picnicAreaId) {
-      setAvailabilityState({
-        checking: false,
-        message: "No picnic area selected. Your date and time are available for entry-only booking.",
-        isAvailable: true,
-        availableSlots: [],
-        suggestedDates: [],
-        error: null,
-      });
-      return;
-    }
-
     setAvailabilityState({
       checking: true,
       message: "Checking availability...",
@@ -277,12 +273,12 @@ export default function BookingPage() {
       error: null,
     });
 
-    const { slots, suggestions } = await fetchAvailability(form.bookingDate, form.picnicAreaId);
+    const { slots, suggestions } = await fetchAvailability(form.bookingDate, form.picnicAreaId, form.bookingTime);
 
     if (slots.includes(form.bookingTime)) {
       setAvailabilityState({
         checking: false,
-        message: "This picnic area is available.",
+        message: form.picnicAreaId ? "This picnic area is available." : "Entry-only booking is available.",
         isAvailable: true,
         availableSlots: slots,
         suggestedDates: suggestions,
@@ -331,7 +327,7 @@ export default function BookingPage() {
       error: null,
     });
 
-    const { slots, suggestions } = await fetchAvailability(date, form.picnicAreaId);
+    const { slots, suggestions } = await fetchAvailability(date, form.picnicAreaId, form.bookingTime);
 
     setAvailabilityState({
       checking: false,

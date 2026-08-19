@@ -303,7 +303,7 @@ export default function BookingPage() {
     setErrors((previous) => ({ ...previous, bookingTime: "" }));
     setAvailabilityState((previous) => ({
       ...previous,
-      message: "This picnic area is available.",
+      message: form.picnicAreaId ? "This picnic area is available." : "Entry-only booking is available.",
       isAvailable: true,
       error: null,
     }));
@@ -714,6 +714,13 @@ export default function BookingPage() {
                         </button>
                       ))}
                     </div>
+                    <button
+                      type="submit"
+                      disabled={!form.bookingTime || availabilityState.isAvailable !== true || submitState.isSubmitting}
+                      className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-forest/20 transition hover:bg-forest-dark disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                    >
+                      {submitState.isSubmitting ? "Continuing..." : "Continue Booking"}
+                    </button>
                   </div>
                 )}
 

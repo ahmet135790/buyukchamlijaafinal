@@ -259,8 +259,8 @@ export default function BookingPage() {
     if (!form.picnicAreaId) {
       setAvailabilityState({
         checking: false,
-        message: "No picnic area selected. You can continue without one, or choose a picnic area to check availability.",
-        isAvailable: null,
+        message: "No picnic area selected. Your date and time are available for entry-only booking.",
+        isAvailable: true,
         availableSlots: [],
         suggestedDates: [],
         error: null,

@@ -946,7 +946,7 @@ export default async function AdminDashboardPage({
 
                 {filteredItems.map((booking) => {
                   const visitorCounts = getVisitorCounts(booking);
-                  const areaName = booking.selected_area_id ? areaLookup[booking.selected_area_id] || "Any" : "Any";
+                  const areaName = booking.selected_area_id ? areaLookup[booking.selected_area_id] || "No Picnic Area" : "No Picnic Area";
 
                   return (
                     <tr key={booking.id} className="align-top">
@@ -1016,7 +1016,7 @@ export default async function AdminDashboardPage({
 
           {filteredItems.map((booking) => {
             const visitorCounts = getVisitorCounts(booking);
-            const areaName = booking.selected_area_id ? areaLookup[booking.selected_area_id] || "Any" : "Any";
+            const areaName = booking.selected_area_id ? areaLookup[booking.selected_area_id] || "No Picnic Area" : "No Picnic Area";
 
             return (
               <article key={booking.id} className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -1087,7 +1087,8 @@ export default async function AdminDashboardPage({
               const payment = customerHistoryPaymentLookup[booking.id];
               const outstanding = Math.max(Number(booking.total_price ?? 0) - (payment?.validPaid ?? 0), 0);
               const visitors = getVisitorCounts(booking);
-              return <div key={booking.id} className="flex min-w-0 flex-wrap items-center gap-3 px-4 py-3 text-sm"><span className="shrink-0 font-semibold text-slate-500">{formatDisplayDate(booking.booking_date)} · {formatDisplayTime(booking.booking_time)}</span><span className="min-w-0 flex-1 truncate font-semibold text-slate-900" title={customerHistoryAreaLookup[booking.selected_area_id ?? ""] || "Any"}>{formatShortReference(booking.reservation_code || booking.id)} · {customerHistoryAreaLookup[booking.selected_area_id ?? ""] || "Any"} · {visitors.total} guests</span><span className="shrink-0 font-semibold text-slate-700">{formatMoney(booking.total_price)} / {formatMoney(payment?.validPaid ?? 0)} / {formatMoney(outstanding)}</span><span className={`shrink-0 rounded-full border px-2 py-1 text-[10px] font-semibold ${getBookingStatusClasses(booking.booking_status)}`}>{formatBookingStatus(booking.booking_status)}</span></div>;
+              const areaName = customerHistoryAreaLookup[booking.selected_area_id ?? ""] || "No Picnic Area";
+              return <div key={booking.id} className="flex min-w-0 flex-wrap items-center gap-3 px-4 py-3 text-sm"><span className="shrink-0 font-semibold text-slate-500">{formatDisplayDate(booking.booking_date)} · {formatDisplayTime(booking.booking_time)}</span><span className="min-w-0 flex-1 truncate font-semibold text-slate-900" title={areaName}>{formatShortReference(booking.reservation_code || booking.id)} · {areaName} · {visitors.total} guests</span><span className="shrink-0 font-semibold text-slate-700">{formatMoney(booking.total_price)} / {formatMoney(payment?.validPaid ?? 0)} / {formatMoney(outstanding)}</span><span className={`shrink-0 rounded-full border px-2 py-1 text-[10px] font-semibold ${getBookingStatusClasses(booking.booking_status)}`}>{formatBookingStatus(booking.booking_status)}</span></div>;
             })}
           </div>
         </section>
@@ -1153,7 +1154,7 @@ export default async function AdminDashboardPage({
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                   <div className="text-sm font-semibold text-slate-900">Booking Information</div>
                   <div className="mt-3 space-y-3 text-sm text-slate-700">
-                    <div><span className="text-slate-500">Area booked:</span> <span className="font-medium text-slate-900">{selectedBookingWithDiscount.selected_area_id ? areaLookup[selectedBookingWithDiscount.selected_area_id] || "Any" : "Any"}</span></div>
+                    <div><span className="text-slate-500">Area booked:</span> <span className="font-medium text-slate-900">{selectedBookingWithDiscount.selected_area_id ? areaLookup[selectedBookingWithDiscount.selected_area_id] || "No Picnic Area" : "No Picnic Area"}</span></div>
                     <div><span className="text-slate-500">Type of booking / function:</span> <span className="font-medium text-slate-900">Not specified</span></div>
                     <div><span className="text-slate-500">Guests:</span> <span className="font-medium text-slate-900">{formatGuestCount(selectedBookingWithDiscount)}</span></div>
                     <div><span className="text-slate-500">Arrival time:</span> <span className="font-medium text-slate-900">Not specified</span></div>

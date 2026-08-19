@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAvailableTimeSlots, getPicnicAreaById, getSuggestedDates } from "@/lib/booking/service";
+import { getAvailableTimeSlots, getPicnicAreaById, getSuggestedDates, getTimeSlotsForDay } from "@/lib/booking/service";
 import { isValidBookingTime } from "@/lib/booking/hours";
 
 export async function GET(request: Request) {
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       areaId: null,
       date,
       time,
-      availableSlots: [time],
+      availableSlots: getTimeSlotsForDay(),
       suggestedDates: [],
       areaName: null,
       entryOnly: true,
